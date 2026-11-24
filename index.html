@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Feijoada Light de sábado, feita aqui no prédio. Peça pelo cardápio e pague no Pix ou no cartão.">
+<meta property="og:title" content="Olá, Vizinho! · Feijoada Light">
+<meta property="og:description" content="Feijoada light de sábado, feita aqui no prédio. A gente leva no seu ap.">
+<meta property="og:image" content="https://gabrielharaujo99-cell.github.io/olavizinho/feijoada.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg">
+<meta name="theme-color" content="#1C120E">
+<script>window.OV_API = "https://script.google.com/macros/s/AKfycbyOaThi9ZZf_fc9eHS5rl3sZGkZh8E3WGC4Ad_ziIVD3cCN5QNr7RFCrDogNHUGTMLE/exec";</script>
+<title>Olá, Vizinho! · Feijoada Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Caveat:wght@700&family=Figtree:wght@400..800&display=swap" rel="stylesheet">
+<style>
+  /* Cardápio público do Olá, Vizinho!: lê o cardápio do sistema e manda o pedido direto para o backoffice. */
+  :root{
+    --feijao:#231713; --tinta:#3A2C26; --suave:#7A6A60; --linha:#E6DACA;
+    --laranja:#E5702A; --laranja-esc:#C25A1C; --couve:#2E5B3B; --farofa:#D8A64A; --ouro:#E9BE6A;
+    --toalha:#F6EEDF; --papel:#FBF7EF; --branco:#FFFDF8; --ruim:#A3402B;
+    --serif:'Young Serif',Georgia,serif; --sans:'Figtree',system-ui,sans-serif; --mao:'Caveat','Segoe Print',cursive;
+    --sombra:0 1px 2px rgba(35,23,19,.06), 0 12px 30px -18px rgba(35,23,19,.35);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--papel);color:var(--tinta);font:450 16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+  img,svg{display:block;max-width:100%}
+  button,input,textarea{font:inherit;color:inherit}
+  .xadrez{--x:#E5702A;background-color:#F6EEDF;
+    background-image:linear-gradient(90deg, color-mix(in srgb, var(--x) 55%, transparent) 50%, transparent 0), linear-gradient(color-mix(in srgb, var(--x) 55%, transparent) 50%, transparent 0);
+    background-size:var(--t,28px) var(--t,28px)}
+
+  .topo{position:relative;overflow:hidden;isolation:isolate;color:var(--toalha);
+    background:radial-gradient(70% 90% at 100% 0%, rgba(229,112,42,.34), transparent 60%), radial-gradient(60% 80% at 0% 100%, rgba(46,91,59,.4), transparent 60%), #1C120E}
+  .topo::before{content:'';position:absolute;inset:0;z-index:-1;opacity:.5;
+    background:repeating-linear-gradient(0deg, rgba(246,238,223,.03) 0 20px, transparent 20px 40px), repeating-linear-gradient(90deg, rgba(246,238,223,.03) 0 20px, transparent 20px 40px)}
+  .topo-in{max-width:1120px;margin:0 auto;padding:22px 16px 0;display:grid;gap:8px}
+  .marca{display:flex;align-items:center;gap:12px}
+  .marca .sim{width:52px;height:52px;flex:none}
+  .marca .ola{display:block;font:700 30px/.85 var(--mao);color:#F08A45}
+  .marca .viz{display:block;font:400 25px/1.05 var(--serif)}
+  .hero{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-items:center;padding:22px 0 0}
+  .kicker{font:800 12.5px/1.3 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ouro)}
+  h1{font:400 clamp(44px,11vw,84px)/.98 var(--serif);margin:10px 0 12px;letter-spacing:-.01em}
+  .lead{margin:0;color:rgba(246,238,223,.8);font-size:17px;max-width:46ch}
+  .selos{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+  .selo{display:inline-flex;flex-direction:column;padding:10px 14px;border-radius:14px;background:rgba(246,238,223,.07);border:1px solid rgba(246,238,223,.14);min-width:0}
+  .selo small{font:800 11px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(246,238,223,.62)}
+  .selo b{font-weight:700;color:var(--toalha)}
+  .selo.forte{background:var(--laranja);border-color:var(--laranja)}
+  .selo.forte small{color:rgba(255,255,255,.85)}
+  .prato{position:relative;width:min(100%,480px);margin:26px auto -44px;aspect-ratio:1}
+  .prato::before{content:'';position:absolute;inset:-4% -4% 6% 6%;border-radius:22px;transform:rotate(5deg);box-shadow:0 26px 50px -24px rgba(0,0,0,.6);
+    background:#EFE3CC}
+  .prato img{position:relative;display:block;width:100%;height:100%;object-fit:cover;border-radius:24px;box-shadow:0 30px 60px -28px rgba(0,0,0,.75), 0 0 0 6px #FBF7EF}
+
+  main{position:relative;max-width:1120px;margin:0 auto;padding:40px 16px 40px}
+  /* ingredientes soltos pela página: poucos, pequenos e levemente girados */
+  .deco{position:absolute;width:44px;height:44px;pointer-events:none;z-index:0;filter:drop-shadow(0 6px 8px rgba(35,23,19,.12))}
+  .deco.louro{top:30px;right:16px;transform:rotate(-24deg)}
+  .grade > section{position:relative}
+  .deco.laranja{top:0;right:4px;width:40px;height:40px;transform:rotate(14deg)}
+  .passos{position:relative}
+  .deco.cumbuca{top:-50px;right:24px;width:48px;height:48px;transform:rotate(-6deg)}
+  footer{position:relative}
+  .deco.torresmo{position:static;display:block;margin:0 auto 8px;width:46px;height:46px;transform:rotate(-4deg)}
+  @media (min-width: 900px){ .deco.louro{right:32px;top:52px;width:52px;height:52px} .deco.cumbuca{right:40px} }
+  .grade{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+  h2{font:400 28px/1.15 var(--serif);color:var(--feijao);margin:0 0 6px}
+  .sub{margin:0 0 18px;color:var(--suave)}
+  .vem{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:0 0 34px}
+  .vem div{display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:16px;background:var(--branco);border:1px solid var(--linha)}
+  .vem-ic{flex:none;width:52px;height:52px;border-radius:14px;background:var(--toalha);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(35,23,19,.05)}
+  .vem-ic svg{width:40px;height:40px}
+  .vem b{display:block;color:var(--feijao)}
+  .vem small{display:block;color:var(--suave);font-size:14px}
+
+  .aviso-panela{display:flex;gap:10px;align-items:center;padding:12px 16px;border-radius:14px;background:#FCE6D6;color:var(--laranja-esc);font-weight:700;margin:0 0 14px}
+  .aviso-panela.fechado{background:#F7E0D9;color:var(--ruim)}
+  .itens{display:grid;gap:12px}
+  .item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;padding:14px;border-radius:20px;background:var(--branco);border:1.5px solid var(--linha);box-shadow:var(--sombra);transition:border-color .15s, box-shadow .15s}
+  .item.on{border-color:rgba(229,112,42,.6);box-shadow:0 1px 2px rgba(35,23,19,.06),0 14px 34px -18px rgba(229,112,42,.6)}
+  .item .arte{width:96px;height:96px;border-radius:16px;display:grid;place-items:center;background:var(--toalha);box-shadow:inset 0 0 0 1px rgba(35,23,19,.06)}
+  .item .arte svg{width:84px;height:84px}
+  .rot{font:800 11.5px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--laranja-esc)}
+  .item h3{margin:2px 0 0;font:400 21px/1.2 var(--serif);color:var(--feijao)}
+  .item p{margin:4px 0 0;color:var(--suave);font-size:14.5px}
+  .linha-preco{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .preco{font:400 24px/1 var(--serif);color:var(--feijao)}
+  .passo{display:inline-flex;align-items:center;gap:2px;padding:3px;border-radius:999px;background:var(--toalha)}
+  .passo button{width:40px;height:40px;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--feijao)}
+  .passo button.mais{background:var(--laranja);color:#fff}
+  .passo button:disabled{opacity:.35;cursor:default}
+  .passo button svg{width:18px;height:18px}
+  .passo output{min-width:30px;text-align:center;font-weight:800;font-size:17px}
+
+  .form{display:grid;gap:12px;padding:18px;border-radius:20px;background:var(--branco);border:1px solid var(--linha)}
+  .duas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .campo{display:grid;gap:6px;min-width:0}
+  .campo > span{font-weight:700;font-size:14px;color:var(--feijao)}
+  .campo small{color:var(--suave);font-weight:600}
+  .campo input,.campo textarea{width:100%;min-height:48px;padding:0 14px;border:1.5px solid var(--linha);border-radius:14px;background:var(--papel);outline:none}
+  .campo textarea{min-height:70px;padding:12px 14px;resize:vertical}
+  .campo input:focus,.campo textarea:focus{border-color:var(--laranja);background:#fff}
+  .campo.erro input{border-color:var(--ruim);background:#FBEDE8}
+  .seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:var(--toalha);gap:4px}
+  .seg button{min-height:44px;border:0;border-radius:11px;background:transparent;font-weight:700;cursor:pointer;color:var(--suave);padding:0 8px}
+  .seg button[aria-pressed="true"]{background:#fff;color:var(--feijao);box-shadow:0 1px 2px rgba(35,23,19,.1)}
+  .prefs{display:flex;flex-wrap:wrap;gap:8px}
+  .prefs button{min-height:38px;padding:0 14px;border-radius:999px;border:1.5px solid var(--linha);background:var(--papel);font-weight:700;font-size:14px;color:var(--tinta);cursor:pointer}
+  .prefs button[aria-pressed="true"]{background:var(--couve);border-color:var(--couve);color:#fff}
+  .isca{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+  .resumo{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(251,247,239,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--linha)}
+  .resumo-in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .resumo .tot{flex:none;min-width:0}
+  .resumo .tot small{display:block;font-size:12.5px;color:var(--suave);font-weight:700}
+  .resumo .tot b{font:400 22px/1.1 var(--serif);color:var(--feijao);white-space:nowrap}
+  .enviar{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 16px;border:0;border-radius:16px;background:var(--laranja);color:#fff;font-weight:800;font-size:16.5px;cursor:pointer;box-shadow:0 12px 24px -14px rgba(229,112,42,.95);text-decoration:none}
+  .enviar:hover{background:var(--laranja-esc)}
+  .enviar:disabled{opacity:.6;cursor:wait}
+  .enviar svg{width:22px;height:22px;flex:none}
+  .lista-res{display:none}
+
+  .passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:40px}
+  .passos div{padding:18px;border-radius:18px;background:var(--toalha)}
+  .passos b{display:block;font:400 34px/1 var(--serif);color:var(--laranja)}
+  .passos h4{margin:8px 0 4px;font-size:17px;color:var(--feijao)}
+  .passos p{margin:0;color:var(--suave);font-size:14.5px}
+  footer{background:var(--feijao);color:rgba(246,238,223,.75);padding:34px 16px 120px;text-align:center}
+  footer .ola{font:700 28px/1 var(--mao);color:#F08A45}
+  .aviso{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:40;background:var(--feijao);color:var(--toalha);padding:12px 16px;border-radius:14px;font-weight:600;width:max-content;max-width:calc(100vw - 32px);box-shadow:0 20px 40px -18px rgba(35,23,19,.7)}
+  .carregando{padding:30px 0;text-align:center;color:var(--suave)}
+
+  /* pedido enviado */
+  .feito{position:fixed;inset:0;z-index:60;background:rgba(28,18,14,.6);display:grid;place-items:center;padding:16px;overflow-y:auto}
+  .feito-card{width:min(460px,100%);background:var(--branco);border-radius:24px;overflow:hidden;box-shadow:0 30px 80px -24px rgba(0,0,0,.6)}
+  .feito-in{padding:22px 22px 24px;display:grid;gap:12px}
+  .feito .ola{font:700 30px/1 var(--mao);color:var(--laranja)}
+  .feito h3{margin:0;font:400 26px/1.15 var(--serif);color:var(--feijao)}
+  .feito ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;color:var(--tinta)}
+  .feito li{display:flex;justify-content:space-between;gap:10px}
+  .feito .total{display:flex;justify-content:space-between;border-top:1px solid var(--linha);padding-top:10px;font-weight:800}
+  .feito .pix{padding:12px 14px;border-radius:14px;background:var(--toalha);font-size:14.5px}
+  .feito .pix b{display:block;font-size:16px;color:var(--feijao);overflow-wrap:anywhere}
+  .lg-nota{margin:-4px 0 0;font-size:13px;color:var(--suave);text-align:center}
+  .zap2{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:14px;border:1.5px solid var(--linha);color:var(--feijao);font-weight:800;text-decoration:none}
+  .pixbox{display:grid;gap:10px;justify-items:center;padding:16px;border-radius:16px;background:var(--toalha)}
+  .pixbox .qr{width:200px;height:200px;padding:10px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px var(--linha)}
+  .pixbox .qr svg{width:100%;height:100%;display:block}
+  .pixbox .rot{font:800 11.5px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--laranja-esc)}
+  .pixbox .cc{width:100%;display:flex;gap:8px}
+  .pixbox .cc input{flex:1;min-width:0;height:44px;padding:0 12px;border-radius:12px;border:1.5px solid var(--linha);background:#fff;font:600 12.5px var(--sans);color:var(--suave)}
+  .pixbox .cc button{flex:none;height:44px;padding:0 14px;border:0;border-radius:12px;background:var(--feijao);color:#fff;font-weight:800;cursor:pointer}
+  .pixbox small{color:var(--suave);font-size:12.5px;text-align:center}
+  .feito .fechar{background:none;border:0;color:var(--suave);font-weight:700;cursor:pointer;min-height:40px}
+
+  @media (min-width: 900px){
+    .topo-in{padding:30px 32px 0}
+    .hero{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:30px;padding:30px 0 40px}
+    .prato{margin:0 0 -110px auto}
+    main{padding:60px 32px 60px}
+    .grade{grid-template-columns:minmax(0,1.35fr) minmax(340px,.85fr);gap:36px;align-items:start}
+    .lateral{position:sticky;top:24px}
+    .resumo{position:static;padding:0;background:none;border:0;backdrop-filter:none;margin-top:14px}
+    .resumo-in{flex-direction:column;align-items:stretch;padding:18px;border-radius:20px;background:var(--branco);border:1px solid var(--linha);box-shadow:var(--sombra)}
+    .lista-res{display:block;margin:0;padding:0;list-style:none;color:var(--suave);font-size:14.5px}
+    .lista-res li{display:flex;justify-content:space-between;gap:10px;padding:4px 0}
+    .lista-res li b{color:var(--feijao)}
+    .resumo .tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--linha);padding-top:10px}
+    footer{padding-bottom:40px}
+    .aviso{bottom:30px}
+  }
+  @media (max-width: 380px){ .item{grid-template-columns:72px minmax(0,1fr)} .item .arte{width:72px;height:72px} .item .arte svg{width:62px;height:62px} .duas{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="topo-in">
+    <div class="marca"><svg class="sim" viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="#D8A64A" stroke-width="5" stroke-linecap="round"><path d="M44 21c-4.2-3.2-4.2-6.6 0-9.6s4.2-6.6 0-9.6"/><path d="M60 21c-4.2-3.2-4.2-6.6 0-9.6s4.2-6.6 0-9.6"/><path d="M76 21c-4.2-3.2-4.2-6.6 0-9.6s4.2-6.6 0-9.6"/></g><g fill="#F6EEDF"><rect x="52" y="25" width="16" height="9" rx="4.5"/><path d="M16 43c0-6.5 19.7-10.5 44-10.5s44 4 44 10.5z"/><rect x="5" y="54" width="20" height="11" rx="5.5"/><rect x="95" y="54" width="20" height="11" rx="5.5"/><path d="M18 47h84v45a16 16 0 0 1-16 16H34a16 16 0 0 1-16-16z"/></g><g fill="#CCC3B6"><rect x="29" y="58" width="14" height="14" rx="3"/><rect x="53" y="58" width="14" height="14" rx="3"/><rect x="29" y="80" width="14" height="14" rx="3"/><rect x="53" y="80" width="14" height="14" rx="3"/><rect x="77" y="80" width="14" height="14" rx="3"/></g><rect x="77" y="58" width="14" height="14" rx="3" fill="#E5702A"/></svg>
+      <div><span class="ola">Olá,</span><span class="viz">Vizinho!</span></div></div>
+    <div class="hero">
+      <div>
+        <div class="kicker">Estamos de volta com a nossa</div>
+        <h1>Feijoada Light</h1>
+        <p class="lead" id="lead">Costela suína, lombo e linguiça calabresa, com arroz, couve, pernil assado e farofa da casa.</p>
+        <div class="selos">
+          <div class="selo forte"><small>Próxima feijoada</small><b id="quando">sábado</b></div>
+          <div class="selo"><small>Entrega</small><b>No seu ap</b></div>
+        </div>
+      </div>
+      <div class="prato"><img src="feijoada.jpg" alt="Prato da Feijoada Light: feijão com costela, lombo e calabresa, arroz soltinho, couve com bacon e farofa da casa" width="900" height="900"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <svg class="deco louro" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 31C9.5 15 21.5 7.5 34.5 8 33.5 21.5 24 31.5 6 31z" fill="#6B7F3A"/><path d="M8.5 29C16 22.5 24 15.5 31.5 10.5" stroke="#AFC274" stroke-width="1.3" fill="none" stroke-linecap="round"/><g stroke="#AFC274" stroke-width="1" stroke-linecap="round" opacity=".8"><path d="M15 23.5l-1-4.5"/><path d="M20 19.5l-.6-5"/><path d="M15.5 23l4.5 1"/><path d="M21 19l4.8.8"/></g></svg>
+  <h2>O que vem no prato</h2>
+  <p class="sub" id="prato-txt">E pra acompanhar:</p>
+  <div class="vem">
+    <div><span class="vem-ic"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 29c1-10 7.5-16.5 15-16.5S34 19 35 29z" fill="#FFFFFF" stroke="#E2D6BF" stroke-width="1.1"/><path d="M9 28c1-7 5-11.5 10-12.5" stroke="#F1EADC" stroke-width="2.4" fill="none" stroke-linecap="round"/><g fill="#E6DCC8"><ellipse cx="20.0" cy="17.5" rx="2.1" ry=".9" transform="rotate(-35 20.0 17.5)"/><ellipse cx="14.0" cy="20.5" rx="2.1" ry=".9" transform="rotate(20 14.0 20.5)"/><ellipse cx="18.0" cy="20.5" rx="2.1" ry=".9" transform="rotate(-10 18.0 20.5)"/><ellipse cx="22.0" cy="20.5" rx="2.1" ry=".9" transform="rotate(40 22.0 20.5)"/><ellipse cx="26.0" cy="20.5" rx="2.1" ry=".9" transform="rotate(-55 26.0 20.5)"/><ellipse cx="12.0" cy="23.5" rx="2.1" ry=".9" transform="rotate(15 12.0 23.5)"/><ellipse cx="16.0" cy="23.5" rx="2.1" ry=".9" transform="rotate(-35 16.0 23.5)"/><ellipse cx="20.0" cy="23.5" rx="2.1" ry=".9" transform="rotate(20 20.0 23.5)"/><ellipse cx="24.0" cy="23.5" rx="2.1" ry=".9" transform="rotate(-10 24.0 23.5)"/><ellipse cx="28.0" cy="23.5" rx="2.1" ry=".9" transform="rotate(40 28.0 23.5)"/><ellipse cx="10.0" cy="26.5" rx="2.1" ry=".9" transform="rotate(-55 10.0 26.5)"/><ellipse cx="14.0" cy="26.5" rx="2.1" ry=".9" transform="rotate(15 14.0 26.5)"/><ellipse cx="18.0" cy="26.5" rx="2.1" ry=".9" transform="rotate(-35 18.0 26.5)"/><ellipse cx="22.0" cy="26.5" rx="2.1" ry=".9" transform="rotate(20 22.0 26.5)"/><ellipse cx="26.0" cy="26.5" rx="2.1" ry=".9" transform="rotate(-10 26.0 26.5)"/><ellipse cx="30.0" cy="26.5" rx="2.1" ry=".9" transform="rotate(40 30.0 26.5)"/></g><rect x="4" y="29" width="32" height="2.4" rx="1.2" fill="#E2D6BF"/></svg></span><span><b>Arroz soltinho</b><small>branquinho, feito na hora</small></span></div>
+    <div><span class="vem-ic"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 31C7 19 14 9 25 7c3 9-2 21-17 24z" fill="#2E5B3B"/><path d="M15 33c1-10 8-16 18-16-1 9-8 16-18 16z" fill="#4E8A44"/><g stroke="#8CC07A" stroke-width="1.2" fill="none" stroke-linecap="round"><path d="M9.5 29.5C13 21 18 14 24 9"/><path d="M16.5 31.5C21 26 26 21 31.5 18.5"/></g><g fill="#D98579"><rect x="22" y="27" width="3.4" height="2.8" rx=".8"/><rect x="12" y="21" width="3" height="2.6" rx=".8"/></g></svg></span><span><b>Couve</b><small>refogada com bacon e alho</small></span></div>
+    <div><span class="vem-ic"><svg viewBox="0 0 40 40" aria-hidden="true"><g transform="rotate(-14 20 20) translate(-1 -5)"><path d="M4 20c0-6 6.5-10.5 14.5-10.5S33 14 33 20s-6.5 9.5-14.5 9.5S4 26 4 20z" fill="#6E3418"/><path d="M7 20c0-4.6 5.2-8 11.5-8S30 15.4 30 20s-5.2 7.2-11.5 7.2S7 24.6 7 20z" fill="#DDA07D"/><g stroke="#BD7A52" stroke-width="1" fill="none" stroke-linecap="round" opacity=".75"><path d="M10.5 17.2c4.5-1 10-1 15 .8"/><path d="M9.5 20.4c5.5-.9 11-.8 17 .4"/><path d="M10.5 23.4c4.5.6 10 .5 14.5-.5"/></g><path d="M11 15c2.6-1.4 6-1.9 8.6-1.6" stroke="#F4D7BA" stroke-width="1.7" fill="none" stroke-linecap="round"/></g><g transform="rotate(8 20 20) translate(3 5)"><path d="M4 20c0-6 6.5-10.5 14.5-10.5S33 14 33 20s-6.5 9.5-14.5 9.5S4 26 4 20z" fill="#6E3418"/><path d="M7 20c0-4.6 5.2-8 11.5-8S30 15.4 30 20s-5.2 7.2-11.5 7.2S7 24.6 7 20z" fill="#DDA07D"/><g stroke="#BD7A52" stroke-width="1" fill="none" stroke-linecap="round" opacity=".75"><path d="M10.5 17.2c4.5-1 10-1 15 .8"/><path d="M9.5 20.4c5.5-.9 11-.8 17 .4"/><path d="M10.5 23.4c4.5.6 10 .5 14.5-.5"/></g><path d="M11 15c2.6-1.4 6-1.9 8.6-1.6" stroke="#F4D7BA" stroke-width="1.7" fill="none" stroke-linecap="round"/></g></svg></span><span><b>Pernil assado</b><small>em fatias</small></span></div>
+    <div><span class="vem-ic"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 29c1.5-9 7.5-15 15-15s13.5 6 15 15z" fill="#E4B866"/><g fill="#B98336"><circle cx="12" cy="25" r=".9"/><circle cx="17" cy="21" r=".9"/><circle cx="24" cy="20" r=".9"/><circle cx="29" cy="25" r=".9"/><circle cx="20" cy="26" r=".9"/></g><g fill="#FFF8EA"><rect x="14" y="23" width="3" height="2.4" rx=".7"/><rect x="25" y="23.5" width="3" height="2.4" rx=".7"/></g><circle cx="21.5" cy="18.5" r="1.4" fill="#F2C443"/><g fill="#B4503B"><rect x="18" y="24.5" width="2.6" height="2" rx=".6"/><rect x="27" y="20.5" width="2.6" height="2" rx=".6"/></g><g fill="#3F7F37"><ellipse cx="11.5" cy="27" rx="1.6" ry=".8"/><ellipse cx="23" cy="27.5" rx="1.6" ry=".8"/><ellipse cx="19" cy="20" rx="1.4" ry=".7"/></g><rect x="4" y="29" width="32" height="2.4" rx="1.2" fill="#C9963F"/></svg></span><span><b>Farofa da casa</b><small>com cebola, ovo cozido, bacon e salsinha</small></span></div>
+  </div>
+
+  <div class="grade">
+    <section>
+      <svg class="deco laranja" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" fill="#E8742A"/><circle cx="20" cy="20" r="11.6" fill="#F7B85A"/><g stroke="#FCE3B4" stroke-width="1.6" stroke-linecap="round"><path d="M20 9.5v21"/><path d="M10.9 14.8l18.2 10.4"/><path d="M10.9 25.2l18.2-10.4"/></g><circle cx="20" cy="20" r="2.2" fill="#FCE3B4"/></svg>
+      <h2>Escolha a sua</h2>
+      <p class="sub">Reserve para garantir: acaba rápido!</p>
+      <div id="panela"></div>
+      <div class="itens" id="itens"><div class="carregando">Abrindo o cardápio…</div></div>
+    </section>
+    <aside class="lateral">
+      <h2>Seus dados</h2>
+      <p class="sub">Pra gente saber onde levar.</p>
+      <form class="form" id="form" onsubmit="return false">
+        <label class="campo" id="c-nome"><span>Seu nome</span><input id="nome" autocomplete="given-name" placeholder="Como te chamam no prédio"></label>
+        <label class="campo" id="c-fone"><span>Seu WhatsApp</span><input id="telefone" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000"></label>
+        <div class="duas">
+          <label class="campo"><span>Bloco</span><input id="bloco" placeholder="1"></label>
+          <label class="campo" id="c-apto"><span>Apto</span><input id="apto" inputmode="numeric" placeholder="12"></label>
+        </div>
+        <div class="campo"><span>Quer tirar algum acompanhamento? <small>(opcional, a gente lembra da próxima vez)</small></span><div class="prefs" id="prefs"></div><small style="font-weight:500">A feijoada vai completa: dá para tirar só arroz, couve ou farofa.</small></div>
+        <div class="campo"><span>Pagamento</span>
+          <div class="seg" role="group" aria-label="Pagamento" id="formas"><button type="button" data-forma="pix" aria-pressed="true">Pix</button><button type="button" data-forma="dinheiro" aria-pressed="false">Dinheiro na entrega</button></div></div>
+        <label class="isca" aria-hidden="true">Site<input id="site" tabindex="-1" autocomplete="off"></label>
+      </form>
+      <div class="resumo"><div class="resumo-in">
+        <ul class="lista-res" id="lista-res"></ul>
+        <div class="tot"><small>Total</small><b id="total">R$ 0,00</b></div>
+        <button class="enviar" id="pedir" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Fazer meu pedido</button>
+      </div></div>
+    </aside>
+  </div>
+
+  <div class="passos"><svg class="deco cumbuca" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 18h32c0 9-7 16-16 16S4 27 4 18z" fill="#B5652F"/><rect x="15" y="32.5" width="10" height="3" rx="1.5" fill="#8E4A20"/><ellipse cx="20" cy="18" rx="16" ry="4.6" fill="#8E4A20"/><ellipse cx="20" cy="18" rx="13.4" ry="3.2" fill="#3B2229"/><circle cx="15" cy="17.6" r="1.3" fill="#6A4250"/><circle cx="23" cy="18.5" r="1.2" fill="#6A4250"/><circle cx="19" cy="16.8" r="1" fill="#6A4250"/><path d="M9 24c2 4 6 6.5 11 6.5" stroke="#D88E5C" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".75"/></svg>
+    <div><b>1</b><h4>Escolha e peça</h4><p id="p1">Monte o pedido aqui. Ele chega direto na nossa cozinha.</p></div>
+    <div><b>2</b><h4>Pague do seu jeito</h4><p>Pix na hora pelo QR Code, cartão em até 12x ou dinheiro na entrega.</p></div>
+    <div><b>3</b><h4>Chega no seu ap</h4><p id="p3">Entregamos no seu ap no sábado a partir das 12h.</p></div>
+  </div>
+</main>
+
+<footer><svg class="deco torresmo" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 27.5c0-3 1.6-5.5 4.2-6.8-.3-3 2.3-5.4 5.2-4.7 1-2.6 4.1-3.7 6.6-2.3 2-1.8 5.2-1.6 6.9.5 2.9-.7 5.6 1.4 5.6 4.3 2.4 1.2 3.5 3.9 2.5 6.4.6 2.7-.8 4.6-3 4.6H8c-1.9 0-3-.9-3-2z" fill="#D69A45"/><path d="M5 27.5c0 1.6 1.2 2.5 3 2.5h24c2.2 0 3.4-1.4 3.1-3.4-1.4 1-3.1 1.2-4.6.3-1.4 1.4-3.7 1.6-5.3.3-1.6 1.3-4 1.3-5.6-.1-1.7 1.3-4.1 1.2-5.6-.2-1.6 1.1-3.6 1.2-5 .6z" fill="#F4E2C6"/><g fill="#F0C27A"><circle cx="12" cy="20.5" r="2.1"/><circle cx="18.5" cy="17" r="2.3"/><circle cx="25" cy="17.6" r="2"/><circle cx="30" cy="21.2" r="1.8"/><circle cx="21.5" cy="22" r="1.6"/><circle cx="15" cy="24" r="1.4"/><circle cx="27" cy="24.4" r="1.4"/></g><g fill="#B8772F"><circle cx="12.6" cy="21.2" r=".8"/><circle cx="19.2" cy="17.8" r=".8"/><circle cx="25.6" cy="18.3" r=".7"/><circle cx="30.5" cy="21.8" r=".6"/></g></svg><span class="ola">Olá, vizinho!</span><p>Feijoada Light feita com carinho, aqui no prédio. A gente leva no seu ap.</p></footer>
+
+<script>
+'use strict';
+(function () {
+  const el = (id) => document.getElementById(id);
+  const brl = (n) => (Number(n) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+  const C = { itens: [], prefs: [] }, qtd = {}, prefs = {};
+  let modo = 'entrega', forma = 'pix', enviando = false;
+
+  function chamar(fn) {
+    const args = Array.prototype.slice.call(arguments, 1);
+    if (window.OV_API) {
+      // Página própria: fala com o sistema sem mandar login (credentials: 'omit'), então várias contas Google não atrapalham.
+      const req = fn === 'cardapioPublico'
+        ? fetch(window.OV_API + '?api=cardapio', { credentials: 'omit', cache: 'no-store' })
+        : fetch(window.OV_API, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ acao: fn, args: args }) });
+      return req.then((r) => r.json()).then((j) => { if (!j || !j.ok) throw new Error((j && j.erro) || 'Não deu certo. Tente de novo.'); return j.valor; });
+    }
+    return new Promise((ok, erro) => google.script.run.withSuccessHandler(ok).withFailureHandler(erro)[fn].apply(null, args));
+  }
+  function msgErro(e) { return String(e && e.message || e || 'Não deu certo.').replace(/^(Error|Exception):\s*/, ''); }
+  function aviso(t, ms) { const a = document.createElement('div'); a.className = 'aviso'; a.textContent = t; document.body.appendChild(a); setTimeout(() => a.remove(), ms || 3600); }
+  function dataBr(iso) { const p = iso.split('-'); return p[2] + '/' + p[1]; }
+  function diaTxt(iso) { return DIAS[new Date(iso + 'T12:00:00').getDay()]; }
+
+  // Desenhos das embalagens (vista de cima), escolhidos pelo tamanho do item.
+  function arte(porcoes) {
+    const marmita = (x, y, w, h) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="#FFFFFF" stroke="#D9CFBF" stroke-width="2"/>';
+    const lado = '<rect x="50" y="14" width="38" height="20" rx="5" fill="#F3EEE3"/><rect x="50" y="37" width="18" height="16" rx="5" fill="#2E5B3B"/><rect x="70" y="37" width="18" height="16" rx="5" fill="#D8A64A"/><rect x="50" y="56" width="38" height="16" rx="5" fill="#B8714B"/>';
+    const feijao = '<rect x="12" y="14" width="34" height="58" rx="6" fill="#33202A"/><circle cx="24" cy="30" r="6" fill="#4B2C35"/><circle cx="34" cy="52" r="6" fill="#4B2C35"/>';
+    if (porcoes <= 1) return '<svg viewBox="0 0 100 86">' + marmita(6, 8, 88, 70) + feijao + lado + '</svg>';
+    const pote = (cx, cy, r) => '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#FFFFFF" stroke="#D9CFBF" stroke-width="2"/><circle cx="' + cx + '" cy="' + cy + '" r="' + (r - 5) + '" fill="#33202A"/>';
+    const caixa = '<g transform="translate(-6 0)">' + marmita(8, 8, 60, 70) + '<rect x="14" y="14" width="48" height="20" rx="5" fill="#F3EEE3"/><rect x="14" y="37" width="23" height="16" rx="5" fill="#2E5B3B"/><rect x="39" y="37" width="23" height="16" rx="5" fill="#D8A64A"/><rect x="14" y="56" width="48" height="16" rx="5" fill="#B8714B"/></g>';
+    return '<svg viewBox="0 0 100 86">' + caixa + (porcoes < 2 ? pote(80, 52, 17) : pote(80, 30, 15) + pote(80, 64, 15)) + '</svg>';
+  }
+  const ic = (p) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="' + p + '"/></svg>';
+  const serve = (p) => p <= 1 ? 'Serve 1 pessoa' : p < 2 ? 'Serve 1 a 2 pessoas' : 'Serve ' + Math.round(p) + ' pessoas';
+
+  function porcoesEscolhidas() { return C.itens.reduce((s, it) => s + (qtd[it.id] || 0) * (it.porcoes || 0), 0); }
+  function total() { return C.itens.reduce((s, it) => s + (qtd[it.id] || 0) * it.preco, 0); }
+
+  function desenhar() {
+    el('quando').textContent = diaTxt(C.data).replace(/^./, (c) => c.toUpperCase()) + ', ' + dataBr(C.data) + ' · ' + String(C.horario || '').replace('a partir das ', 'desde ');
+    el('lead').textContent = C.prato;
+    el('p3').textContent = 'Entregamos no seu ap ' + diaTxt(C.data) + ' ' + (C.horario || '') + '.';
+    const fechado = !C.aberto || C.restam <= 0;
+    el('panela').innerHTML = !C.aberto ? '<div class="aviso-panela fechado">As encomendas desta semana estão fechadas. Chame a gente no WhatsApp.</div>'
+      : C.restam <= 0 ? '<div class="aviso-panela fechado">A panela deste sábado já está cheia! Chame a gente no WhatsApp para a lista de espera.</div>'
+      : C.restam <= 8 ? '<div class="aviso-panela">Corre: só restam ' + String(C.restam).replace('.', ',') + ' porções na panela deste sábado.</div>' : '';
+    el('itens').innerHTML = C.itens.map((it, k) => '<article class="item" id="i-' + it.id + '"><div class="arte">' + arte(it.porcoes) + '</div><div>' +
+      '<div class="rot">' + esc(it.nome.split(' · ')[1] ? it.nome.split(' · ')[0] : it.categoria) + '</div><h3>' + esc(it.nome.split(' · ')[1] || it.nome) + '</h3><p>' + esc(it.descricao || serve(it.porcoes)) + '</p>' +
+      '<div class="linha-preco"><span class="preco">' + brl(it.preco) + '</span><div class="passo"><button type="button" data-id="' + it.id + '" data-d="-1" aria-label="Tirar uma">' + ic('M5 12h14') + '</button>' +
+      '<output id="q-' + it.id + '">0</output><button type="button" class="mais" data-id="' + it.id + '" data-d="1" aria-label="Pôr mais uma"' + (fechado ? ' disabled' : '') + '>' + ic('M12 5v14M5 12h14') + '</button></div></div></div></article>').join('');
+    el('prefs').innerHTML = C.prefs.map((p) => '<button type="button" data-pref="' + esc(p) + '" aria-pressed="' + !!prefs[p] + '">' + esc(p) + '</button>').join('');
+    el('pedir').disabled = fechado;
+    if (!C.pagarOnline && forma === 'cartao') forma = 'pix';
+    el('formas').style.gridTemplateColumns = C.pagarOnline ? '1fr 1fr 1fr' : '1fr 1fr';
+    el('formas').innerHTML = [['pix', 'Pix'], C.pagarOnline ? ['cartao', 'Cartão'] : null, ['dinheiro', C.pagarOnline ? 'Dinheiro' : 'Dinheiro na entrega']].filter(Boolean)
+      .map((o) => '<button type="button" data-forma="' + o[0] + '" aria-pressed="' + (forma === o[0]) + '">' + o[1] + '</button>').join('');
+    atualiza();
+  }
+  function atualiza() {
+    C.itens.forEach((it) => { el('q-' + it.id).textContent = qtd[it.id] || 0; el('i-' + it.id).classList.toggle('on', (qtd[it.id] || 0) > 0); });
+    el('total').textContent = brl(total());
+    const escolhidos = C.itens.filter((it) => qtd[it.id]);
+    el('lista-res').innerHTML = escolhidos.length ? escolhidos.map((it) => '<li><span>' + qtd[it.id] + '× ' + esc(it.nome) + '</span><b>' + brl(qtd[it.id] * it.preco) + '</b></li>').join('') : '<li>Nenhuma opção escolhida ainda.</li>';
+  }
+
+  document.addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-d]');
+    if (b) {
+      const id = b.dataset.id, d = Number(b.dataset.d), it = C.itens.find((x) => x.id === id);
+      if (d > 0 && porcoesEscolhidas() + (it.porcoes || 0) > C.restam + 1e-9) { aviso('A panela não comporta mais que isso neste sábado.'); return; }
+      qtd[id] = Math.max(0, (qtd[id] || 0) + d); atualiza(); return;
+    }
+    const m = ev.target.closest('[data-modo]');
+    if (m) { modo = m.dataset.modo; document.querySelectorAll('[data-modo]').forEach((x) => x.setAttribute('aria-pressed', x === m)); return; }
+    const f = ev.target.closest('[data-forma]');
+    if (f) { forma = f.dataset.forma; document.querySelectorAll('[data-forma]').forEach((x) => x.setAttribute('aria-pressed', x === f)); return; }
+    const p = ev.target.closest('[data-pref]');
+    if (p) { const k = p.dataset.pref; prefs[k] = !prefs[k]; p.setAttribute('aria-pressed', !!prefs[k]); }
+  });
+
+  el('pedir').addEventListener('click', async () => {
+    if (enviando) return;
+    const escolhidos = C.itens.filter((it) => qtd[it.id]);
+    if (!escolhidos.length) { aviso('Escolha pelo menos uma opção.'); el('itens').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const dados = { nome: el('nome').value.trim(), telefone: el('telefone').value.trim(), bloco: el('bloco').value.trim(), apto: el('apto').value.trim(), entrega: modo, forma: forma,
+      prefs: Object.keys(prefs).filter((k) => prefs[k] && C.prefs.indexOf(k) >= 0), site: el('site').value, itens: escolhidos.map((it) => ({ itemId: it.id, qtd: qtd[it.id] })) };
+    const fone = dados.telefone.replace(/\D/g, '');
+    el('c-nome').classList.toggle('erro', !dados.nome); el('c-fone').classList.toggle('erro', fone.length < 10); el('c-apto').classList.toggle('erro', !dados.apto);
+    if (!dados.nome) return aviso('Coloque o seu nome.');
+    if (fone.length < 10) return aviso('Coloque o seu WhatsApp com DDD.');
+    if (!dados.apto) return aviso('Coloque o seu apto para a entrega.');
+    try { localStorage.setItem('ov-dados', JSON.stringify({ nome: dados.nome, telefone: dados.telefone, bloco: dados.bloco, apto: dados.apto, prefs: dados.prefs })); } catch (e) { /* ok */ }
+    enviando = true; el('pedir').disabled = true; el('pedir').lastChild.textContent = 'Enviando…';
+    try {
+      const r = await chamar('enviarPedido', dados);
+      mostrarFeito(r, dados);
+      C.itens.forEach((it) => { qtd[it.id] = 0; });
+      carregar();
+    } catch (e) { aviso(msgErro(e), 6000); carregar(); }
+    finally { enviando = false; el('pedir').disabled = false; el('pedir').lastChild.textContent = 'Fazer meu pedido'; }
+  });
+
+  function mostrarFeito(r, dados) {
+    const txt = 'Olá, vizinho! 👋 Acabei de fazer o pedido nº ' + r.numero + ' pelo cardápio, para ' + diaTxt(r.data) + ', ' + dataBr(r.data) + ':\n' +
+      r.itens.map((i) => '• ' + i.qtd + '× ' + i.nome).join('\n') + '\n*Total: ' + brl(r.total) + '*\n\n' + dados.nome + (dados.bloco ? ' · bloco ' + dados.bloco : '') + (dados.apto ? ', apto ' + dados.apto : '') +
+      (dados.prefs.length ? '\nSem: ' + dados.prefs.map((p) => p.replace(/^Sem /i, '').toLowerCase()).join(', ') : '');
+    const link = r.whatsapp ? 'https://wa.me/' + (r.whatsapp.length <= 11 ? '55' : '') + r.whatsapp + '?text=' + encodeURIComponent(txt) : '';
+    const v = document.createElement('div');
+    v.className = 'feito'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-modal', 'true');
+    v.innerHTML = '<div class="feito-card"><div class="feito-in"><span class="ola">Obrigado, vizinho!</span>' +
+      '<h3>Pedido nº ' + r.numero + ' anotado para ' + diaTxt(r.data) + ', ' + dataBr(r.data) + '.</h3>' +
+      '<ul>' + r.itens.map((i) => '<li><span>' + i.qtd + '× ' + esc(i.nome) + '</span><b>' + brl(i.qtd * i.preco) + '</b></li>').join('') + '</ul>' +
+      '<div class="total"><span>Total</span><span>' + brl(r.total) + '</span></div>' +
+      (r.prefs.length ? '<p style="margin:0;color:var(--couve);font-weight:700">' + esc(r.prefs.join(', ')) + '</p>' : '') +
+      (r.pagar ? '<a class="enviar" href="' + esc(r.pagar) + '" target="_top">Pagar com cartão · ' + brl(r.total) + '</a><p class="lg-nota">Crédito em até 12x, no pagamento seguro da InfinitePay. Depois de pagar, você volta para cá.</p>'
+        : r.pix ? '<div class="pixbox"><span class="rot">Pague com Pix · ' + brl(r.total) + '</span><div class="qr" id="qr-pix" role="img" aria-label="QR Code do Pix"></div>' +
+            '<div class="cc"><input id="pix-cc" readonly value="' + esc(r.pix) + '" aria-label="Pix copia e cola"><button type="button" id="pix-copiar">Copiar</button></div>' +
+            '<small>Abra o app do banco, escolha Pix › Ler QR Code ou Pix copia e cola. O valor já vem certinho.</small></div>'
+        : dados.forma === 'cartao' ? '<div class="pix">Pagamento com cartão: a gente manda o link no seu WhatsApp.</div>' : dados.forma === 'dinheiro' ? '<div class="pix">Pagamento em dinheiro na entrega.</div>' : '<div class="pix">Pagamento por Pix: a gente manda a chave no WhatsApp.</div>') +
+      '<button type="button" class="fechar">Fechar</button></div></div>';
+    v.addEventListener('click', (e) => {
+      if (e.target.closest('#pix-copiar')) {
+        const i = document.getElementById('pix-cc'), b = e.target.closest('#pix-copiar');
+        const ok = () => { b.textContent = 'Copiado!'; setTimeout(() => { b.textContent = 'Copiar'; }, 2000); };
+        try { navigator.clipboard.writeText(i.value).then(ok, () => { i.select(); document.execCommand('copy'); ok(); }); } catch (x) { i.select(); document.execCommand('copy'); ok(); }
+        return;
+      }
+      if (e.target === v || e.target.closest('.fechar')) v.remove();
+    });
+    document.body.appendChild(v);
+    if (r.pix) {
+      const alvo = document.getElementById('qr-pix');
+      try { const q = qrcode(0, 'M'); q.addData(r.pix); q.make(); alvo.innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); }
+      catch (x) { alvo.style.display = 'none'; }
+    }
+  }
+
+  function carregar() {
+    return chamar('cardapioPublico').then((c) => { Object.assign(C, c); desenhar(); })
+      .catch((e) => { el('itens').innerHTML = '<div class="carregando">Não consegui abrir o cardápio. ' + esc(msgErro(e)) + '</div>'; });
+  }
+
+  try {
+    const s = JSON.parse(localStorage.getItem('ov-dados') || '{}');
+    ['nome', 'telefone', 'bloco', 'apto'].forEach((k) => { if (s[k]) el(k).value = s[k]; });
+    (s.prefs || []).forEach((p) => { prefs[p] = true; });
+  } catch (e) { /* ok */ }
+  carregar();
+
+  // Voltou da InfinitePay: confere o pagamento no servidor e mostra o resultado.
+  function voltaPgto(q) {
+    if (!q || !q.order_nsu || !q.slug || !q.transaction_nsu) return;
+    chamar('confirmarPagamento', { order_nsu: q.order_nsu, slug: q.slug, transaction_nsu: q.transaction_nsu, receipt_url: q.receipt_url || '' }).then((r) => {
+      const v = document.createElement('div');
+      v.className = 'feito';
+      v.innerHTML = '<div class="feito-card"><div class="feito-in"><span class="ola">' + (r.pago ? 'Pago, vizinho!' : 'Quase lá!') + '</span>' +
+        '<h3>' + (r.pago ? 'Recebemos o pagamento do pedido nº ' + r.numero + (r.metodo ? ' (' + esc(r.metodo) + ')' : '') + '. Até sábado!' : 'Ainda não vimos o pagamento do pedido' + (r.numero ? ' nº ' + r.numero : '') + '. Se você pagou, ele aparece em instantes.') + '</h3>' +
+        '<button type="button" class="fechar">Fechar</button></div></div>';
+      v.addEventListener('click', (e) => { if (e.target === v || e.target.closest('.fechar')) v.remove(); });
+      document.body.appendChild(v);
+    }).catch(() => {});
+  }
+  try {
+    if (!window.OV_API && typeof google !== 'undefined' && google.script && google.script.url && google.script.url.getLocation) google.script.url.getLocation((loc) => voltaPgto(loc && loc.parameter));
+    else voltaPgto(Object.fromEntries(new URLSearchParams(location.search)));
+  } catch (e) { /* ok */ }
+})();
+</script>
+</body>
+</html>
